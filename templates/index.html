@@ -1,0 +1,148 @@
+﻿$def with (query_f, page_f, results)
+
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Bjstinfo Demo</title>
+<style>
+
+table, th, td{
+		
+	}
+a:link{
+	text-decoration: none;
+	color: #20586B;
+  }
+#navigator {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	height: 30px;
+	width:	100%;
+	margin: 0px;
+	padding: 0px;
+	background: #20586B;
+	font-size: 140%;
+	color: white;
+	}
+#mainbody {
+	float: left;
+	border:0px solid red;
+	width: %85;
+	margin: 30px;
+}
+
+#demo {
+	margin-left: 100px;
+	margin-top: 45px;
+	width: 85%;
+	position: relative;
+	}
+#search {
+	position: fixed;
+	background: #D1DBDE;
+	width: 91%;
+	height: 30px;
+	}
+	
+.query_entry {
+	width: 400px;
+	height: 25px;
+	margin: 0px;
+	padding: 0px;
+	position: relative;
+	float:left;
+	}
+.search_button {
+	width: 80px;
+	height: 28px;
+	margin: 0px;
+	padding: 0px;
+	font-size: 108%;
+	position: relative;
+	float:left;
+	}
+.go {
+	float:right;
+	width:45px;
+	height: 20px;
+	border: 1px solid white;
+	padding-left: 2px;
+	margin-top: 2.5px;
+	background: #D1DBDE;
+	}
+.go_next {
+	float:right;
+	margin-right:-3px;
+	}
+.go_last {
+	float:right;
+	margin-right: -3px;
+	}
+.docitem {
+	margin-top: 10px;
+	}
+.title {
+	color: #1F7591;
+	margin-bottom: 4px;
+	}
+.author {
+	font-style: italic;
+	margin-bottom: 4px;
+	}
+.abstract {
+	font-size: 90%;
+	}
+.url {
+	color: #1F7591;
+	}
+</style>
+</head>
+
+<body>
+<div>
+<div id=navigator > 万方数据库查询演示系统 </div>
+<div id=mainbody>
+	<div id="search">
+	<form name="query_str" method="post">
+	$if not query_f.valid: <p> Sorry, Try again.</p>
+	<div style="float: left;">
+	$:query_f.render()
+	</div>
+	<div style="float: right;">
+	$:page_f.render()
+	</div>
+	</form>
+	</div>
+
+	<div id="demo">
+	$if results != "":
+		$if results['tot_docs'] != 0:
+			$for doc in results['docs']:
+				<div class="docitem" >
+				<div class='title'>
+				<a href="
+				$doc['Url']
+				">
+				$doc['Title']
+				</a>
+				</div>
+				<div class='author'>
+				$doc['Author']
+				</div>
+				<div class='abstract'>
+				$doc['Abstract']
+				</div>
+				<div class='keywords'>
+				$doc['Keywords']
+				</div>
+				<div class='url'>
+				$doc['Url']
+				</div>
+				<hr>
+			</div>
+	</div>
+</div>
+</div>
+</body>
+</html>
