@@ -3,6 +3,8 @@ bin/
 bin-debug/
 bin-release/
 templates/
+data-index/
+*.pyc
 
 # Other files and folders
 .settings/
