@@ -3,6 +3,7 @@ bin/
 bin-debug/
 bin-release/
 *.pyc
+sample/
 
 # Other files and folders
 .settings/
