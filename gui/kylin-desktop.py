@@ -6,7 +6,7 @@
 import wx
 class Display(wx.Frame):
     def __init__(self, parent, title):
-        super(Display, self).__init__(parent, title=title, size=(450, 350))
+        super(Display, self).__init__(parent, title=title, size=(450, 450))
         
         self.InitUI()
         self.Show()
@@ -32,33 +32,8 @@ class Display(wx.Frame):
         font.SetPointSize(9)
 
         vbox = wx.BoxSizer(wx.VERTICAL)
-
-        srcSelect = wx.BoxSizer(wx.HORIZONTAL)
-        srcText = wx.StaticText(panel, label='Terms Directory')
-        srcText.SetFont(font)
-        srcSelect.Add(srcText, flag=wx.RIGHT, border=8)
-        srcPath = wx.TextCtrl(panel)
-        srcSelect.Add(srcPath, proportion=1)
-        vbox.Add(srcSelect, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
-
-        vbox.Add((-1, 10))
-
-        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
-        st2 = wx.StaticText(panel, label='Manual Query:')
-        st2.SetFont(font)
-        hbox2.Add(st2)
-        vbox.Add(hbox2, flag=wx.LEFT | wx.TOP, border=10)
-
-        vbox.Add((-1, 10))
-
-        hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-        tc2 = wx.TextCtrl(panel, style=wx.TE_MULTILINE)
-        hbox3.Add(tc2, proportion=1, flag=wx.EXPAND)
-        vbox.Add(hbox3, proportion=1, flag=wx.LEFT|wx.RIGHT|wx.EXPAND, 
-            border=10)
-
-        vbox.Add((-1, 25))
-
+        
+        # query fields selection.
         hbox4 = wx.BoxSizer(wx.HORIZONTAL)
         cb1 = wx.CheckBox(panel, label='KeyWords')
         cb1.SetFont(font)
@@ -66,18 +41,58 @@ class Display(wx.Frame):
         hbox4.Add(cb1)
         cb2 = wx.CheckBox(panel, label='Author Name')
         cb2.SetFont(font)
-        hbox4.Add(cb2, flag=wx.LEFT, border=10)
+        hbox4.Add(cb2, flag=wx.LEFT, border=15)
         cb3 = wx.CheckBox(panel, label='Journal Name')
         cb3.SetFont(font)
-        hbox4.Add(cb3, flag=wx.LEFT, border=10)
-        vbox.Add(hbox4, flag=wx.LEFT, border=10)
-
+        hbox4.Add(cb3, flag=wx.LEFT, border=15)
+        vbox.Add(hbox4, flag=wx.LEFT|wx.TOP, border=8)
+        vbox.Add((-1, 10))          
+        
+        # source selection
+        srcSelect = wx.BoxSizer(wx.HORIZONTAL)
+        srcText = wx.StaticText(panel, label='Source ')
+        srcText.SetFont(font)
+        srcSelect.Add(srcText, flag=wx.RIGHT, border=28)
+        srcPath = wx.ComboBox(panel)
+        srcSelect.Add(srcPath, proportion=1)
+        srcFile = wx.Button(panel, label="Browse...")
+        srcSelect.Add(srcFile, proportion=0.5)
+        vbox.Add(srcSelect, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=5)
+#        vbox.Add((-1, 10))
+        
+        # destination selection
+        destSelect = wx.BoxSizer(wx.HORIZONTAL)
+        destText = wx.StaticText(panel, label='Destination ')
+        destText.SetFont(font)
+        destSelect.Add(destText, flag=wx.RIGHT, border=0)
+        destPath = wx.ComboBox(panel)
+        destSelect.Add(destPath, proportion=1)
+        destFile = wx.Button(panel, label="Browse...")
+        destSelect.Add(destFile, proportion=0.5)
+        vbox.Add(destSelect, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=5)        
+        vbox.Add((-1, 10))    
+        
+        # manual input query terms.
+        manual_query = wx.BoxSizer(wx.HORIZONTAL)
+        st2 = wx.StaticText(panel, label='Manual Query:')
+        st2.SetFont(font)
+        manual_query.Add(st2)
+        vbox.Add(manual_query, flag=wx.LEFT | wx.TOP, border=10)
+        vbox.Add((-1, 10))
+        
+        # input textual area.
+        hbox3 = wx.BoxSizer(wx.HORIZONTAL)
+        tc2 = wx.TextCtrl(panel, style=wx.TE_MULTILINE)
+        hbox3.Add(tc2, proportion=1, flag=wx.EXPAND)
+        vbox.Add(hbox3, proportion=1, flag=wx.LEFT|wx.RIGHT|wx.EXPAND, 
+            border=10)
         vbox.Add((-1, 25))
-
+        
+        # OK and Close button.
         hbox5 = wx.BoxSizer(wx.HORIZONTAL)
-        btn1 = wx.Button(panel, label='Ok', size=(70, 30))
+        btn1 = wx.Button(panel, label='Ok', size=(70, 25))
         hbox5.Add(btn1)
-        btn2 = wx.Button(panel, label='Close', size=(70, 30))
+        btn2 = wx.Button(panel, label='Close', size=(70, 25))
         hbox5.Add(btn2, flag=wx.LEFT|wx.BOTTOM, border=5)
         vbox.Add(hbox5, flag=wx.ALIGN_RIGHT|wx.RIGHT, border=10)
 
