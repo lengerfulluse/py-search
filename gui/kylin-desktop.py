@@ -3,15 +3,27 @@
 
 #search-desktop.py
 
+import os
 import wx
+
 class Display(wx.Frame):
+    
     def __init__(self, parent, title):
         super(Display, self).__init__(parent, title=title, size=(450, 450))
+        
+        # setting some global variables.
+        self.srcPath = ''
+        self.destPath = ''
+        
+        self.terms = ''
+        self.srcPathComb = ''
+        self.destPathComb = ''
         
         self.InitUI()
         self.Show()
     
     def InitUI(self):
+        """ initialize the UI display of the main frame"""
         
         menubar = wx.MenuBar()
         # set File menu, Quit item here.
@@ -53,21 +65,23 @@ class Display(wx.Frame):
         srcText = wx.StaticText(panel, label='Source ')
         srcText.SetFont(font)
         srcSelect.Add(srcText, flag=wx.RIGHT, border=28)
-        srcPath = wx.ComboBox(panel)
-        srcSelect.Add(srcPath, proportion=1)
+        self.srcPathComb = wx.ComboBox(panel)
+        srcSelect.Add(self.srcPathComb, proportion=1)
         srcFile = wx.Button(panel, label="Browse...")
+        #bind the event should before the Boxsizer.
+        self.Bind(wx.EVT_BUTTON, self.OnSrcFile, srcFile)
         srcSelect.Add(srcFile, proportion=0.5)
         vbox.Add(srcSelect, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=5)
-#        vbox.Add((-1, 10))
         
         # destination selection
         destSelect = wx.BoxSizer(wx.HORIZONTAL)
         destText = wx.StaticText(panel, label='Destination ')
         destText.SetFont(font)
         destSelect.Add(destText, flag=wx.RIGHT, border=0)
-        destPath = wx.ComboBox(panel)
-        destSelect.Add(destPath, proportion=1)
+        self.destPathComb = wx.ComboBox(panel)
+        destSelect.Add(self.destPathComb, proportion=1)
         destFile = wx.Button(panel, label="Browse...")
+        self.Bind(wx.EVT_BUTTON, self.OnDestFile, destFile)
         destSelect.Add(destFile, proportion=0.5)
         vbox.Add(destSelect, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=5)        
         vbox.Add((-1, 10))    
@@ -81,9 +95,9 @@ class Display(wx.Frame):
         vbox.Add((-1, 10))
         
         # input textual area.
-        hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-        tc2 = wx.TextCtrl(panel, style=wx.TE_MULTILINE)
-        hbox3.Add(tc2, proportion=1, flag=wx.EXPAND)
+        hbox3= wx.BoxSizer(wx.HORIZONTAL)
+        self.terms = wx.TextCtrl(panel, style=wx.TE_MULTILINE)
+        hbox3.Add(self.terms, proportion=1, flag=wx.EXPAND)
         vbox.Add(hbox3, proportion=1, flag=wx.LEFT|wx.RIGHT|wx.EXPAND, 
             border=10)
         vbox.Add((-1, 25))
@@ -99,11 +113,48 @@ class Display(wx.Frame):
         panel.SetSizer(vbox)
         
         
-    def OnQuit(self):
-        self.close()
         
-    def OnHelp(self):
-        print "Kylin Search"
+        
+    def OnSrcFile(self, e):
+        """ select source file terms to query """
+        
+        self.srcdirname = ''
+        dlg = wx.FileDialog(self, "Choose Source Terms File", self.srcdirname, "", "*.*", wx.OPEN)
+        if dlg.ShowModal() == wx.ID_OK:
+            self.srcfilename = dlg.GetFilename()
+            self.srcdirname = dlg.GetDirectory() + '/'
+            self.srcPath = os.path.join(unicode(self.srcdirname), unicode(self.srcfilename))
+            f = open(self.srcPath, 'r')
+            self.terms.SetValue(f.read())
+            self.srcPathComb.SetValue(self.srcPath)
+            f.close()
+        dlg.Destroy()
+        
+        
+    def OnDestFile(self, e):
+        """ select destination file to store the results"""
+        
+        self.destdirname = ''
+        dlg = wx.FileDialog(self, "Choose Destination Path", self.destdirname, "", "*.*", wx.SAVE)
+        if dlg.ShowModal() == wx.ID_OK:
+            self.destfilename = dlg.GetFilename()
+            self.destdirname = dlg.GetDirectory() + '/'
+            self.destPath = os.path.join(self.destdirname, self.destfilename)
+            f = open(self.destPath, 'w')
+            f.write("Hello, I'am the query results")
+            self.destPathComb.SetValue(self.destPath)
+            f.close()
+        dlg.Destroy()
+        
+    def OnQuit(self, e):
+        self.Close(True)
+        
+    def OnHelp(self, e):
+        """Show the help and version information about Kylin Search"""
+        
+        dlg = wx.MessageDialog(self, " Version 0.1 By Joseph Heng\n lengerfulluse@gmail.com\n Any feedback please let me know\n", "About Kylin Search", wx.OK)
+        dlg.ShowModal()
+        dlg.Destroy()
         
 if __name__ == '__main__':
   
