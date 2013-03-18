@@ -196,7 +196,8 @@ class Display(wx.Frame):
             queries = text.splitlines()
             search = Search()
             for query in queries:
-                search.search(query)
+                hits = search.search(query)
+                kw_freq = search.fre_rank(hits)
             #invoke the search module of kylin.
             
         

@@ -1,6 +1,8 @@
 ﻿import sys
 import os
+import operator
 import whoosh.index as index
+from collections import Counter
 from whoosh.qparser import MultifieldParser
 from whoosh.reading import IndexReader
 from whoosh.highlight import *
@@ -102,11 +104,11 @@ class Search:
 #			results.scorer = my_score
 #			results.formatter = HtmlFormatter()
 			for hit in results:
-				print hit.fields()
+#				print hit.fields()
+				hit_docs.append(hit.fields())
 				
 				# why just cannot implement the highlight function?
 #				print hit.highlights('Abstract', top=20)
-			hit_docs = results
 		
 		return hit_docs
 		
@@ -121,9 +123,29 @@ class Search:
 		pass
 	
 	def fre_rank(self, results):
-		""" ranking the keywords frequency in the search results """
+		""" ranking the keywords frequency in the search results 
 		
-		pass
+		Args:
+		       results: return by search function(formatted like sequence, every element
+		       is also dictionary: {"Title": title, "Abstract": abstract} like
+		Return:
+		       sorted list(also with key, value): descent by the keyword frequency.
+		"""
+		
+		kw_freq = {}
+		words = []
+		
+		# construct words list, and invoke the Counter class.
+		for hit in results:
+			keywords = hit["Keywords"].strip()
+			if keywords:
+				words.extend(keywords.split())
+		print "total words: " + str(len(words))
+		kw_freq = Counter(words)
+		sorted_kw_freq = sorted(kw_freq.iteritems(), key=operator.itemgetter(1))
+		
+		return sorted_kw_freq
+	
 		
 def main():
 	search = Search()
