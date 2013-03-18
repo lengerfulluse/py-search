@@ -97,7 +97,7 @@ class Search:
 		qp = MultifieldParser(query_fields, schema=ix.schema, fieldboosts=field_boosts)
 		q = qp.parse(query)
 		with ix.searcher() as s:
-			results = s.search(q, limit=10, terms=True)
+			results = s.search(q, limit=50, terms=True)
 #			my_cf = ContextFragmenter(maxchars=100, surround=30)	#custome fragmenter.
 #			results.fragmenter = my_cf
 #			my_score = StandarDeviationScorer(my_cf)	#custome scorer.

@@ -5,6 +5,7 @@
 
 import os
 import wx
+import xlwt
 from searcher import Search
 
 class Display(wx.Frame):
@@ -46,19 +47,6 @@ class Display(wx.Frame):
         font.SetPointSize(9)
         
         vbox = wx.BoxSizer(wx.VERTICAL)
-        
-        # query fields selection.
-#        hbox4 = wx.BoxSizer(wx.HORIZONTAL)
-#        cb1 = wx.CheckBox(panel, label='KeyWords')
-#        cb1.SetFont(font)
-#        cb1.SetValue(True)
-#        hbox4.Add(cb1)
-#        cb2 = wx.CheckBox(panel, label='Author Name')
-#        cb2.SetFont(font)
-#        hbox4.Add(cb2, flag=wx.LEFT, border=15)
-#        cb3 = wx.CheckBox(panel, label='Journal Name')
-#        cb3.SetFont(font)
-#        hbox4.Add(cb3, flag=wx.LEFT, border=15)
         
         #query fields selection.
         sb = wx.StaticBox(panel, label="Query Fields")
@@ -133,7 +121,6 @@ class Display(wx.Frame):
         
         
         
-        
     def OnSrcFile(self, e):
         """ select source file terms to query """
         
@@ -202,21 +189,44 @@ class Display(wx.Frame):
             if not os.path.exists(destdir):
                 os.makedirs(destdir)
                 
-            f = open(destpath, 'w')
+#            f = open(destpath, 'w')
+            # write the results to sheets.
+            book = xlwt.Workbook()
+            sh = book.add_sheet("Sorted Frequency") 
+            ezxf = xlwt.easyxf
+            heading_xf = ezxf('align: wrap on, vert centre, horiz center')            
+            
+            column = 0
             for query in queries:
                 hits = search.search(query)
                 kw_freq = search.fre_rank(hits)
-                for word, freq in kw_freq:
-                    f.write(word.encode("gbk") + "\t" + str(freq) + "\n")
-                f.write("------------------------------------------\n")
-                    
-            f.close()
-            #invoke the search module of kylin.
+                # write to the heading.
+                sh.write(0, column, query, heading_xf)
+                sh.write(0, column+1, str(len(kw_freq)), heading_xf)
+                
+                self.xls_write(sh, kw_freq, column)
+                column += 2
+            book.save(destpath)
+                # text file write modular
+#                for word, freq in kw_freq:
+#                   f.write(word.encode("gbk") + "\t" + str(freq) + "\n")
+#                f.write("------------------------------------------\n")
+#                    
+#            f.close()
             
         
+    def xls_write(self, sh, kw_freq, column):
+        """ write the list in column of excel """
         
-            
-        
+        # setting the cell style, font, alignment etc.
+        ezxf = xlwt.easyxf
+        heading_xf = ezxf('align: wrap on, vert centre, horiz center')
+        row = 1
+        for word, freq in kw_freq:
+            sh.write(row, column, word, heading_xf)
+            sh.write(row, column+1, str(freq), heading_xf)
+            row += 1
+    
     def OnFocus(self, e):
         self.FromFile = False
         
