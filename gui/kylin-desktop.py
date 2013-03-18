@@ -116,10 +116,14 @@ class Display(wx.Frame):
         
         # OK and Close button.
         hbox5 = wx.BoxSizer(wx.HORIZONTAL)
-        btn1 = wx.Button(panel, label='Search', size=(70, 25))
-        hbox5.Add(btn1)
-        btn2 = wx.Button(panel, label='Close', size=(70, 25))
-        hbox5.Add(btn2, flag=wx.LEFT|wx.BOTTOM, border=5)
+        search = wx.Button(panel, label='Search', size=(70, 25))
+        self.Bind(wx.EVT_BUTTON, self.OnSearch, search)
+        hbox5.Add(search)
+        
+        close = wx.Button(panel, label='Close', size=(70, 25))
+        self.Bind(wx.EVT_BUTTON, self.OnQuit, close)
+        hbox5.Add(close, flag=wx.LEFT|wx.BOTTOM, border=5)
+        
         vbox.Add(hbox5, flag=wx.ALIGN_RIGHT|wx.RIGHT, border=10)
 
         panel.SetSizer(vbox)
@@ -158,13 +162,33 @@ class Display(wx.Frame):
             f.close()
         dlg.Destroy()
         
+    def OnSearch(self, e):
+        """ main Whoosh search interface for search module """
+        
+        src_dir = self.srcPathComb.GetValue()
+        dest_dir = self.destPathComb.GetValue()
+        query_words = self.terms.GetValue()
+        
+        print "Now, invoke the search Module"
+        print "Src Dir: " + self.srcPathComb.GetValue()
+        print "Dest Dir: " + self.destPathComb.GetValue()
+        print "Query: \n" + self.terms.GetValue()
+        
+        # validation check for the src, dest and query terms.
+        if not src_dir.strip() or not dest_dir.strip() or not query_words.strip():
+            dlg = wx.MessageDialog(self, "Please validate the source, destination and query terms not empty!", "Validation Error", wx.ICON_ERROR)
+            dlg.ShowModal()
+            dlg.Destroy()
+        
+        
+        
     def OnQuit(self, e):
         self.Close(True)
         
     def OnHelp(self, e):
         """Show the help and version information about Kylin Search"""
-        
-        dlg = wx.MessageDialog(self, " Version 0.1 By Joseph Heng\n lengerfulluse@gmail.com\n Any feedback please let me know\n", "About Kylin Search", wx.OK)
+                
+        dlg = wx.MessageDialog(self, " Version 0.1 By Joseph Heng\n lengerfulluse@gmail.com\n Any feedback please let me know\n", "About Kylin Search", wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
         
