@@ -11,6 +11,7 @@ class Display(wx.Frame):
     def __init__(self, parent, title):
         super(Display, self).__init__(parent, title=title, size=(450, 450))
         
+        self.FromFile = False
         # setting some global variables.
         self.srcPath = ''
         self.destPath = ''
@@ -78,6 +79,7 @@ class Display(wx.Frame):
         srcText.SetFont(font)
         srcSelect.Add(srcText, flag=wx.RIGHT, border=28)
         self.srcPathComb = wx.ComboBox(panel)
+        self.Bind(wx.EVT_SET_FOCUS, self.OnFocus, self.srcPathComb)
         srcSelect.Add(self.srcPathComb, proportion=1)
         srcFile = wx.Button(panel, label="Browse...")
         #bind the event should before the Boxsizer.
@@ -134,6 +136,9 @@ class Display(wx.Frame):
     def OnSrcFile(self, e):
         """ select source file terms to query """
         
+        # setting the select from file flag to true.
+        
+        self.FromFile = True
         self.srcdirname = ''
         dlg = wx.FileDialog(self, "Choose Source Terms File", self.srcdirname, "", "*.*", wx.OPEN)
         if dlg.ShowModal() == wx.ID_OK:
@@ -156,8 +161,8 @@ class Display(wx.Frame):
             self.destfilename = dlg.GetFilename()
             self.destdirname = dlg.GetDirectory() + '/'
             self.destPath = os.path.join(self.destdirname, self.destfilename)
-            f = open(self.destPath, 'w')
-            f.write("Hello, I'am the query results")
+#            f = open(self.destPath, 'w')
+#            f.write("Hello, I'am the query results")
             self.destPathComb.SetValue(self.destPath)
             f.close()
         dlg.Destroy()
@@ -165,6 +170,16 @@ class Display(wx.Frame):
     def OnSearch(self, e):
         """ main Whoosh search interface for search module """
         
+        if not self.FromFile:
+            try:
+                f = open(self.srcPathComb.GetValue(), 'r')
+                self.terms.SetValue(f.read())
+            except IOError as e:
+                dlg = wx.MessageDialog(self, e.strerror, "Source Path Error", wx.ICON_ERROR)
+                dlg.ShowModal()
+                dlg.Destroy()
+                return
+                
         src_dir = self.srcPathComb.GetValue()
         dest_dir = self.destPathComb.GetValue()
         query_words = self.terms.GetValue()
@@ -175,12 +190,16 @@ class Display(wx.Frame):
         print "Query: \n" + self.terms.GetValue()
         
         # validation check for the src, dest and query terms.
-        if not src_dir.strip() or not dest_dir.strip() or not query_words.strip():
-            dlg = wx.MessageDialog(self, "Please validate the source, destination and query terms not empty!", "Validation Error", wx.ICON_ERROR)
+        if not src_dir.strip() or not dest_dir.strip():
+            dlg = wx.MessageDialog(self, "Please validate the source, destination not empty!", "Validation Error", wx.ICON_ERROR)
             dlg.ShowModal()
             dlg.Destroy()
         
         
+            
+        
+    def OnFocus(self, e):
+        self.FromFile = False
         
     def OnQuit(self, e):
         self.Close(True)
