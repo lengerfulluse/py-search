@@ -5,6 +5,7 @@
 
 import os
 import wx
+from searcher import Search
 
 class Display(wx.Frame):
     
@@ -181,12 +182,9 @@ class Display(wx.Frame):
                 
         src_dir = self.srcPathComb.GetValue()
         dest_dir = self.destPathComb.GetValue()
-        query_words = self.terms.GetValue()
+        text = self.terms.GetValue()
         
         print "Now, invoke the search Module"
-        print "Src Dir: " + self.srcPathComb.GetValue()
-        print "Dest Dir: " + self.destPathComb.GetValue()
-        print "Query: \n" + self.terms.GetValue()
         
         # validation check for the src, dest and query terms.
         if not src_dir.strip() or not dest_dir.strip():
@@ -194,8 +192,11 @@ class Display(wx.Frame):
             dlg.ShowModal()
             dlg.Destroy()
             return
-        if query_words.strip():
-            
+        if text.strip():
+            queries = text.splitlines()
+            search = Search()
+            for query in queries:
+                search.search(query)
             #invoke the search module of kylin.
             
         

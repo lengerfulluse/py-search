@@ -119,6 +119,11 @@ class Search:
 		""" search with keywords about the journals """
 		
 		pass
+	
+	def fre_rank(self, results):
+		""" ranking the keywords frequency in the search results """
+		
+		pass
 		
 def main():
 	search = Search()
