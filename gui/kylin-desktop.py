@@ -71,7 +71,7 @@ class Display(wx.Frame):
         #bind the event should before the Boxsizer.
         self.Bind(wx.EVT_BUTTON, self.OnSrcFile, srcFile)
         srcSelect.Add(srcFile, proportion=0.5)
-        vbox.Add(srcSelect, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=5)
+        vbox.Add(srcSelect, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=3)
         
         # destination selection
         destSelect = wx.BoxSizer(wx.HORIZONTAL)
@@ -83,7 +83,7 @@ class Display(wx.Frame):
         destFile = wx.Button(panel, label="Browse...")
         self.Bind(wx.EVT_BUTTON, self.OnDestFile, destFile)
         destSelect.Add(destFile, proportion=0.5)
-        vbox.Add(destSelect, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=5)        
+        vbox.Add(destSelect, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=3)        
         vbox.Add((-1, 10))    
         
         # manual input query terms.
