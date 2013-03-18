@@ -195,9 +195,22 @@ class Display(wx.Frame):
         if text.strip():
             queries = text.splitlines()
             search = Search()
+            
+            # recursive create directory.
+            destpath = self.destPathComb.GetValue()
+            destdir = os.path.dirname(destpath)
+            if not os.path.exists(destdir):
+                os.makedirs(destdir)
+                
+            f = open(destpath, 'w')
             for query in queries:
                 hits = search.search(query)
                 kw_freq = search.fre_rank(hits)
+                for word, freq in kw_freq:
+                    f.write(word.encode("gbk") + "\t" + str(freq) + "\n")
+                f.write("------------------------------------------\n")
+                    
+            f.close()
             #invoke the search module of kylin.
             
         

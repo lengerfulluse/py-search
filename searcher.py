@@ -142,7 +142,7 @@ class Search:
 				words.extend(keywords.split())
 		print "total words: " + str(len(words))
 		kw_freq = Counter(words)
-		sorted_kw_freq = sorted(kw_freq.iteritems(), key=operator.itemgetter(1))
+		sorted_kw_freq = sorted(kw_freq.iteritems(), key=operator.itemgetter(1),reverse=True)
 		
 		return sorted_kw_freq
 	
