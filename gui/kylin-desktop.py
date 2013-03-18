@@ -42,23 +42,35 @@ class Display(wx.Frame):
         panel = wx.Panel(self)
         font = wx.SystemSettings_GetFont(wx.SYS_SYSTEM_FONT)
         font.SetPointSize(9)
-
+        
         vbox = wx.BoxSizer(wx.VERTICAL)
         
         # query fields selection.
-        hbox4 = wx.BoxSizer(wx.HORIZONTAL)
-        cb1 = wx.CheckBox(panel, label='KeyWords')
-        cb1.SetFont(font)
-        cb1.SetValue(True)
-        hbox4.Add(cb1)
-        cb2 = wx.CheckBox(panel, label='Author Name')
-        cb2.SetFont(font)
-        hbox4.Add(cb2, flag=wx.LEFT, border=15)
-        cb3 = wx.CheckBox(panel, label='Journal Name')
-        cb3.SetFont(font)
-        hbox4.Add(cb3, flag=wx.LEFT, border=15)
-        vbox.Add(hbox4, flag=wx.LEFT|wx.TOP, border=8)
-        vbox.Add((-1, 10))          
+#        hbox4 = wx.BoxSizer(wx.HORIZONTAL)
+#        cb1 = wx.CheckBox(panel, label='KeyWords')
+#        cb1.SetFont(font)
+#        cb1.SetValue(True)
+#        hbox4.Add(cb1)
+#        cb2 = wx.CheckBox(panel, label='Author Name')
+#        cb2.SetFont(font)
+#        hbox4.Add(cb2, flag=wx.LEFT, border=15)
+#        cb3 = wx.CheckBox(panel, label='Journal Name')
+#        cb3.SetFont(font)
+#        hbox4.Add(cb3, flag=wx.LEFT, border=15)
+        
+        #query fields selection.
+        sb = wx.StaticBox(panel, label="Query Fields")
+        sb.SetFont(font)
+        boxsizer = wx.StaticBoxSizer(sb, wx.HORIZONTAL)
+        
+        # set default keywords search.
+        keywords_cb = wx.CheckBox(panel, label="Keywords")
+        boxsizer.Add(keywords_cb, flag=wx.LEFT|wx.RIGHT|wx.EXPAND, border=26)
+        keywords_cb.SetValue(True)
+        boxsizer.Add(wx.CheckBox(panel, label="Author Name"), flag=wx.CENTER|wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND, border=26)
+        boxsizer.Add(wx.CheckBox(panel, label="Journal Name"), flag=wx.LEFT|wx.RIGHT|wx.EXPAND, border=26)        
+        vbox.Add(boxsizer, flag=wx.LEFT|wx.TOP|wx.EXPAND, border=8)
+        vbox.Add((-1, 10))
         
         # source selection
         srcSelect = wx.BoxSizer(wx.HORIZONTAL)
@@ -104,7 +116,7 @@ class Display(wx.Frame):
         
         # OK and Close button.
         hbox5 = wx.BoxSizer(wx.HORIZONTAL)
-        btn1 = wx.Button(panel, label='Ok', size=(70, 25))
+        btn1 = wx.Button(panel, label='Search', size=(70, 25))
         hbox5.Add(btn1)
         btn2 = wx.Button(panel, label='Close', size=(70, 25))
         hbox5.Add(btn2, flag=wx.LEFT|wx.BOTTOM, border=5)
