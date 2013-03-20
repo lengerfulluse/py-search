@@ -1,0 +1,4 @@
+#!/usr/bin/python
+
+str = 'D:\xb3\xac\xb2\xce\xb3\xe9\xd1\xf9\xba\xcdhLDA\xca\xb5\xd1\xe9 - Copy.txt'
+print str.decode("gbk")
